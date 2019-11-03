@@ -2,12 +2,18 @@ sudo: required
 services:
   - docker
 
+# basically the build step; we build a new docker image by using the Dockerfile.dev
+# and tag it then
 before_install:
   - docker build -t dominator88/docker-react -f Dockerfile.dev .
 
+# run the build in tests. 
+# for this start the docker-react container and execute specific CMD: npm run test
 script:
   - docker run -e CI=true dominator88/docker-react npm run test
 
+# deploy stage to ElasticBeanstalk
+# In AWS Console, create the ElasticBeanstalk app with the name 'docker-react'
 deploy:
   provider: elasticbeanstalk
   region: "eu-central-1"
